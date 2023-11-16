@@ -44,7 +44,7 @@ namespace Authorization.Controllers
         }
 
         [HttpGet("[action]")]
-        [AllowAnonymous]
+      
         public async Task<IActionResult> UserAndYoneticiSignIn()
         {
             var claims = new List<Claim>
@@ -56,6 +56,22 @@ namespace Authorization.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authenticationProperties = new AuthenticationProperties();
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authenticationProperties);
+            return Ok();
+        }
+
+        [HttpGet("[action]")]
+        [Authorize(Policy ="CombinedPolicy")]
+        public IActionResult CombinedPolicy()
+        {
+
+            return Ok();
+        }
+
+        [HttpGet("[action]")]
+        [Authorize(Policy = "CombinedPolicy2")]
+        public IActionResult CombinedPolicy2()
+        {
+
             return Ok();
         }
 
@@ -81,6 +97,47 @@ namespace Authorization.Controllers
             return Ok();
         }
 
+        [HttpGet("[action]")]
+        [Authorize(Policy = "ClaimPolicy")]
+        public IActionResult ClaimPolicy()
+        {
+            return Ok();
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> AvakadoSignIn()
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("Avakado","meyve")
+            };
+            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authenticationProperties = new AuthenticationProperties();
+            var claimPrincipal = new ClaimsPrincipal(claimIdentity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, authenticationProperties);
+
+
+            return Ok();
+        }
+        [HttpGet("[action]")]
+        [Authorize(Policy = "ClaimValuePolicy")]
+        public IActionResult ClaimValuePolicy()
+        {
+            return Ok();
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> AvakadoValueSignIn()
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("Avakado","sebzedir")
+            };
+            var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authenticationProperties = new AuthenticationProperties();
+            var claimPrincipal = new ClaimsPrincipal(claimIdentity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal, authenticationProperties);
+
+            return Ok();
+        }
 
         [HttpGet("[action]")]
         public IActionResult Index()

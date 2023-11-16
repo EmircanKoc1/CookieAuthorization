@@ -36,9 +36,24 @@ namespace Authorization
                 options.AddPolicy("YoneticiRoluAra", policy =>
                 {
                     policy.RequireRole("Yonetici");
-
                 });
-                
+                options.AddPolicy("ClaimPolicy", policy =>
+                {
+                    policy.RequireClaim("Avakado");
+                });
+                options.AddPolicy("ClaimValuePolicy", policy =>
+                {
+                    policy.RequireClaim("Avakado", "sebzedir");
+                });
+                options.AddPolicy("CombinedPolicy", policy =>
+                {
+                    policy.RequireRole("Yonetici", "User");
+                });
+                options.AddPolicy("CombinedPolicy2", policy =>
+                {
+                    policy.RequireRole("Yonetici");
+                    policy.RequireRole("User");
+                });
 
             });
 
